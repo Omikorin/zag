@@ -11,7 +11,7 @@ export function machine(userContext: UserDefinedContext) {
       context: {
         pageSize: 10,
         siblingCount: 1,
-        page: 1,
+        currentPage: 1,
         type: "button",
         translations: {
           rootLabel: "pagination",
@@ -32,14 +32,14 @@ export function machine(userContext: UserDefinedContext) {
 
       computed: {
         totalPages: (ctx) => Math.ceil(ctx.count / ctx.pageSize),
-        previousPage: (ctx) => (ctx.page === 1 ? null : ctx.page - 1),
-        nextPage: (ctx) => (ctx.page === ctx.totalPages ? null : ctx.page + 1),
+        previousPage: (ctx) => (ctx.currentPage === 1 ? null : ctx.currentPage - 1),
+        nextPage: (ctx) => (ctx.currentPage === ctx.totalPages ? null : ctx.currentPage + 1),
         pageRange: (ctx) => {
-          const start = (ctx.page - 1) * ctx.pageSize
+          const start = (ctx.currentPage - 1) * ctx.pageSize
           const end = start + ctx.pageSize
           return { start, end }
         },
-        isValidPage: (ctx) => ctx.page >= 1 && ctx.page <= ctx.totalPages,
+        isValidPage: (ctx) => ctx.currentPage >= 1 && ctx.currentPage <= ctx.totalPages,
       },
 
       on: {
@@ -76,9 +76,9 @@ export function machine(userContext: UserDefinedContext) {
     {
       guards: {
         isValidPage: (ctx, evt) => evt.page >= 1 && evt.page <= ctx.totalPages,
-        isValidCount: (ctx, evt) => ctx.page > evt.count,
-        canGoToNextPage: (ctx) => ctx.page < ctx.totalPages,
-        canGoToPrevPage: (ctx) => ctx.page > 1,
+        isValidCount: (ctx, evt) => ctx.currentPage > evt.count,
+        canGoToNextPage: (ctx) => ctx.currentPage < ctx.totalPages,
+        canGoToPrevPage: (ctx) => ctx.currentPage > 1,
       },
       actions: {
         setCount(ctx, evt) {
@@ -94,10 +94,10 @@ export function machine(userContext: UserDefinedContext) {
           set.page(ctx, 1)
         },
         goToPrevPage(ctx) {
-          set.page(ctx, ctx.page - 1)
+          set.page(ctx, ctx.currentPage - 1)
         },
         goToNextPage(ctx) {
-          set.page(ctx, ctx.page + 1)
+          set.page(ctx, ctx.currentPage + 1)
         },
         setPageIfNeeded(ctx, _evt) {
           if (ctx.isValidPage) return
@@ -110,8 +110,8 @@ export function machine(userContext: UserDefinedContext) {
 
 const set = {
   page: (ctx: MachineContext, value: number) => {
-    if (isEqual(ctx.page, value)) return
-    ctx.page = value
-    ctx.onPageChange?.({ page: ctx.page, pageSize: ctx.pageSize })
+    if (isEqual(ctx.currentPage, value)) return
+    ctx.currentPage = value
+    ctx.onPageChange?.({ page: ctx.currentPage, pageSize: ctx.pageSize })
   },
 }

@@ -7,7 +7,7 @@ import * as utils from "./pagination.utils"
 
 export function connect<T extends PropTypes>(state: State, send: Send, normalize: NormalizeProps<T>): MachineApi<T> {
   const totalPages = state.context.totalPages
-  const page = state.context.page
+  const currentPage = state.context.currentPage
   const translations = state.context.translations
 
   const previousPage = state.context.previousPage
@@ -17,11 +17,11 @@ export function connect<T extends PropTypes>(state: State, send: Send, normalize
   const type = state.context.type
   const isButton = type === "button"
 
-  const isFirstPage = page === 1
-  const isLastPage = page === totalPages
+  const isFirstPage = currentPage === 1
+  const isLastPage = currentPage === totalPages
 
   return {
-    page,
+    currentPage,
     totalPages,
     pages: utils.getTransformedRange(state.context),
     previousPage,
@@ -59,7 +59,7 @@ export function connect<T extends PropTypes>(state: State, send: Send, normalize
 
     getItemProps(props) {
       const index = props.value
-      const isCurrentPage = index === state.context.page
+      const isCurrentPage = index === state.context.currentPage
 
       return normalize.element({
         id: dom.getItemId(state.context, index),

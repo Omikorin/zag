@@ -58,7 +58,7 @@ interface PublicContext extends DirectionProperty, CommonProperties {
   /**
    * The active page
    */
-  page: number
+  currentPage: number
   /**
    * Called when the page number is changed, and it takes the resulting page number argument
    */
@@ -141,7 +141,7 @@ export interface MachineApi<T extends PropTypes = PropTypes> {
   /**
    * The current page.
    */
-  page: number
+  currentPage: number
   /**
    * The total number of pages.
    */

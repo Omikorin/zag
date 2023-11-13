@@ -36,10 +36,10 @@ describe("@zag-js/pagination utils", () => {
 
   describe("getRange method", () => {
     test.each(getRangeTestCases)(
-      "siblingCount: $siblingCount, totalPages: $totalPages, page: $pages",
+      "siblingCount: $siblingCount, totalPages: $totalPages, currentPage: $pages",
       ({ expected, pages, ...ctx }) => {
         for (let page of pages) {
-          const range = getRange({ ...ctx, page })
+          const range = getRange({ ...ctx, currentPage: page })
           expect(range).toEqual(expected)
         }
       },

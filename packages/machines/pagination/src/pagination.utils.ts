@@ -14,7 +14,7 @@ export const transform = (items: (string | number)[]): Pages => {
 
 const ELLIPSIS = "ellipsis"
 
-export type PageContext = Pick<Ctx, "siblingCount" | "page" | "totalPages">
+export type PageContext = Pick<Ctx, "siblingCount" | "currentPage" | "totalPages">
 
 export const getRange = (ctx: PageContext) => {
   /**
@@ -31,8 +31,8 @@ export const getRange = (ctx: PageContext) => {
   const firstPageIndex = 1
   const lastPageIndex = ctx.totalPages
 
-  const leftSiblingIndex = Math.max(ctx.page - ctx.siblingCount, firstPageIndex)
-  const rightSiblingIndex = Math.min(ctx.page + ctx.siblingCount, lastPageIndex)
+  const leftSiblingIndex = Math.max(ctx.currentPage - ctx.siblingCount, firstPageIndex)
+  const rightSiblingIndex = Math.min(ctx.currentPage + ctx.siblingCount, lastPageIndex)
 
   const showLeftEllipsis = leftSiblingIndex > firstPageIndex + 1
   const showRightEllipsis = rightSiblingIndex < lastPageIndex - 1
